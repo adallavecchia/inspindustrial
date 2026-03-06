@@ -135,6 +135,198 @@ section:first-of-type{border-top:none}
   .grid-5{grid-template-columns:repeat(5,1fr)}
 }
 .list-disc{list-style:disc;padding-left:1.25rem}
+
+/* ══════════════════════════════════════════════════════
+   CARRUSEL DE EQUIPOS DE IZAJE
+   ══════════════════════════════════════════════════════ */
+.carousel-section {
+  overflow: hidden;
+  border-top: 1px solid hsl(var(--border) / 0.3);
+  padding: 5rem 0;
+  position: relative;
+}
+.carousel-section::before,
+.carousel-section::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 120px;
+  z-index: 10;
+  pointer-events: none;
+}
+.carousel-section::before {
+  left: 0;
+  background: linear-gradient(90deg, hsl(var(--bg)) 0%, hsl(var(--bg) / 0) 100%);
+}
+.carousel-section::after {
+  right: 0;
+  background: linear-gradient(270deg, hsl(var(--bg)) 0%, hsl(var(--bg) / 0) 100%);
+}
+.carousel-section .container { position: relative; z-index: 1; }
+
+.carousel-track-wrapper {
+  overflow: hidden;
+  width: 100%;
+  margin-top: 2.5rem;
+  cursor: grab;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.carousel-track-wrapper:active { cursor: grabbing; }
+
+.carousel-track {
+  display: flex;
+  gap: 1.25rem;
+  width: max-content;
+  animation: carousel-scroll 28s linear infinite;
+  will-change: transform;
+}
+.carousel-track-wrapper:hover .carousel-track,
+.carousel-track-wrapper:focus-within .carousel-track {
+  animation-play-state: paused;
+}
+@keyframes carousel-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.carousel-item {
+  flex-shrink: 0;
+  width: 280px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card));
+  box-shadow:
+    0 4px 16px -4px hsl(214 70% 5% / 0.55),
+    0 1px 3px hsl(214 70% 5% / 0.4);
+  transition: transform 0.32s cubic-bezier(.2,.8,.3,1),
+              box-shadow 0.32s ease,
+              border-color 0.28s ease;
+  position: relative;
+}
+.carousel-item:hover {
+  transform: translateY(-5px) scale(1.025);
+  border-color: hsl(var(--primary) / 0.7);
+  box-shadow:
+    0 8px 32px -4px hsl(214 70% 5% / 0.7),
+    0 0 0 1px hsl(var(--primary) / 0.35),
+    0 1px 3px hsl(214 70% 5% / 0.5);
+}
+.carousel-item::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 0; height: 0;
+  border-style: solid;
+  border-width: 0 24px 24px 0;
+  border-color: transparent hsl(var(--primary)) transparent transparent;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.carousel-item:hover::before { opacity: 1; }
+
+.carousel-img-wrap {
+  position: relative;
+  width: 100%;
+  padding-top: 75%;
+  overflow: hidden;
+  background: hsl(var(--bg-deep));
+}
+.carousel-img-wrap img {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: contrast(1.15) brightness(0.94) saturate(0.75) sepia(0.10);
+  transition: filter 0.4s ease, transform 0.5s cubic-bezier(.2,.8,.3,1);
+  display: block;
+}
+.carousel-item:hover .carousel-img-wrap img {
+  filter: contrast(1.22) brightness(1.0) saturate(0.88) sepia(0.04);
+  transform: scale(1.06);
+}
+.carousel-img-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg,
+      hsl(214 70% 5% / 0.06) 0%,
+      transparent 40%,
+      hsl(214 70% 5% / 0.45) 100%
+    ),
+    repeating-linear-gradient(0deg,
+      hsl(0 0% 0% / 0.03) 0px, hsl(0 0% 0% / 0.03) 1px,
+      transparent 1px, transparent 3px
+    );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.carousel-caption {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid hsl(var(--border));
+}
+.carousel-caption-ref {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.6rem;
+  color: hsl(var(--primary));
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.carousel-caption-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: hsl(var(--fg) / 0.9);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.carousel-status-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.75rem;
+  padding: 0 0.25rem;
+}
+.carousel-status-bar .status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: hsl(var(--primary));
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.7); }
+}
+.carousel-status-bar .status-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg,
+    hsl(var(--primary) / 0.6),
+    hsl(var(--border) / 0.3) 60%,
+    transparent);
+}
+.carousel-status-bar .status-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  color: hsl(var(--muted) / 0.5);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 640px) {
+  .carousel-item { width: 220px; }
+  .carousel-section::before,
+  .carousel-section::after { width: 48px; }
+}
 </style>
 </head>
 <body>
@@ -150,6 +342,7 @@ section:first-of-type{border-top:none}
       <a href="#hero">Inicio</a>
       <a href="#quienes">Quiénes Somos</a>
       <a href="#servicios">Servicios</a>
+      <a href="#equipos">Equipos</a>
       <a href="#normas">Normas</a>
       <a href="#metodologia">Metodología</a>
       <a href="#contacto" class="nav-cta">Contacto</a>
@@ -258,7 +451,6 @@ section:first-of-type{border-top:none}
     <p class="text-muted text-sm mb-8" style="max-width:48rem">Tarjetas técnicas por alcance, ítems inspeccionados, normativa aplicable y entregables.</p>
     <div class="grid grid-2 gap-5">
 
-      <!-- Servicio 1 -->
       <article class="card" style="overflow:hidden">
         <div class="card-header"><h3 class="font-semibold text-base">Inspección de Elementos de Izaje</h3></div>
         <div class="px-5" style="padding-top:.75rem;padding-bottom:.75rem">
@@ -269,7 +461,6 @@ section:first-of-type{border-top:none}
         </div>
       </article>
 
-      <!-- Servicio 2 -->
       <article class="card" style="overflow:hidden">
         <div class="card-header"><h3 class="font-semibold text-base">Inspección Dimensional y Visual de Equipos</h3></div>
         <div class="px-5" style="padding-top:.75rem;padding-bottom:.75rem">
@@ -280,7 +471,6 @@ section:first-of-type{border-top:none}
         </div>
       </article>
 
-      <!-- Servicio 3 -->
       <article class="card" style="overflow:hidden">
         <div class="card-header"><h3 class="font-semibold text-base">Inspecciones Pre-Operativas en Locación</h3></div>
         <div class="px-5" style="padding-top:.75rem;padding-bottom:.75rem">
@@ -291,28 +481,123 @@ section:first-of-type{border-top:none}
         </div>
       </article>
 
-      <!-- Servicio 4 -->
       <article class="card" style="overflow:hidden">
         <div class="card-header"><h3 class="font-semibold text-base">Control de Estado de Herramientas Críticas</h3></div>
         <div class="px-5" style="padding-top:.75rem;padding-bottom:.75rem">
-          <div class="kv-row"><div class="text-sm text-muted font-semibold">Alcance</div><div class="text-sm text-muted">Verificación técnica independiente del estado de herramientas sometidas a cargas o pares significativos: llaves hidráulicas y dinamométricas, gatos mecánicos e hidráulicos, tensores, manómetros y herramientas de apriete controlado. El servicio determina aptitud para el uso mediante inspección visual, funcional y documental; no incluye calibración ni certificación de herramientas.<div class="flex flex-wrap gap-2 mt-2"><span class="tag">Aptitud para el uso</span><span class="tag">Trazabilidad documental</span><span class="tag">Retiro de servicio</span></div></div></div>
-          <div class="kv-row"><div class="text-sm text-muted font-semibold">Qué se inspecciona</div><div class="text-sm text-muted">Integridad física (cuerpo, juntas, conexiones, accesorios); ausencia de deformaciones, fisuras o daños por sobrecarga; holguras fuera de tolerancia; fugas activas en sistemas hidráulicos; legibilidad de escalas e indicadores; vigencia y trazabilidad de la última calibración; compatibilidad entre el rango de la herramienta y la aplicación declarada; criterios de retiro de servicio según fabricante y/o procedimiento del cliente.</div></div>
-          <div class="kv-row"><div class="text-sm text-muted font-semibold">Normativa aplicable</div><div class="text-sm text-muted">ISO 6789 (herramientas de apriete por torsión, como referencia para evaluación de estado); ASME B30 cuando la herramienta intervenga en operaciones de izaje o soporte de carga; ISO 9001 §7.1.5 (control de equipos de seguimiento y medición); procedimientos internos del cliente; requisitos del fabricante.</div></div>
-          <div class="kv-row"><div class="text-sm text-muted font-semibold">Entregables</div><div class="text-sm text-muted">Registro individual por N° de serie: resultado de inspección (Apto / No Apto / Condicionado), observaciones con referencia normativa aplicada; listado de herramientas con calibración vencida o por vencer; recomendaciones de recalibración, reparación o baja; etiqueta de estado con fecha de inspección.</div></div>
+          <div class="kv-row"><div class="text-sm text-muted font-semibold">Alcance</div><div class="text-sm text-muted">Verificación técnica independiente del estado de herramientas sometidas a cargas o pares significativos: llaves hidráulicas y dinamométricas, gatos mecánicos e hidráulicos, tensores, manómetros y herramientas de apriete controlado.<div class="flex flex-wrap gap-2 mt-2"><span class="tag">Aptitud para el uso</span><span class="tag">Trazabilidad documental</span><span class="tag">Retiro de servicio</span></div></div></div>
+          <div class="kv-row"><div class="text-sm text-muted font-semibold">Qué se inspecciona</div><div class="text-sm text-muted">Integridad física (cuerpo, juntas, conexiones, accesorios); ausencia de deformaciones, fisuras o daños por sobrecarga; holguras fuera de tolerancia; fugas activas en sistemas hidráulicos; legibilidad de escalas e indicadores; vigencia y trazabilidad de la última calibración.</div></div>
+          <div class="kv-row"><div class="text-sm text-muted font-semibold">Normativa aplicable</div><div class="text-sm text-muted">ISO 6789 (herramientas de apriete por torsión); ASME B30 cuando la herramienta intervenga en operaciones de izaje; ISO 9001 §7.1.5; procedimientos internos del cliente.</div></div>
+          <div class="kv-row"><div class="text-sm text-muted font-semibold">Entregables</div><div class="text-sm text-muted">Registro individual por N° de serie: resultado (Apto / No Apto / Condicionado), observaciones con referencia normativa; listado de herramientas con calibración vencida; etiqueta de estado con fecha de inspección.</div></div>
         </div>
       </article>
 
-      <!-- Servicio 5 -->
       <article class="card" style="overflow:hidden">
         <div class="card-header"><h3 class="font-semibold text-base">Elaboración de Registros e Inventarios Técnicos</h3></div>
         <div class="px-5" style="padding-top:.75rem;padding-bottom:.75rem">
-          <div class="kv-row"><div class="text-sm text-muted font-semibold">Alcance</div><div class="text-sm text-muted">Estructuración y actualización de inventarios técnicos de equipos, herramientas y accesorios de uso en operaciones de O&G: codificación, serialización, alta/baja de activos, construcción de hojas de vida y consolidación de evidencia documental asociada (fotografías, certificados de inspección, registros de calibración e informes técnicos previos). El servicio opera sobre activos existentes; no sustituye procesos de calibración, certificación ni mantenimiento.<div class="flex flex-wrap gap-2 mt-2"><span class="tag">Trazabilidad</span><span class="tag">Serialización</span><span class="tag">Control documental</span></div></div></div>
-          <div class="kv-row"><div class="text-sm text-muted font-semibold">Qué se inspecciona / verifica</div><div class="text-sm text-muted">Correspondencia entre activo físico y registro documental; completitud y consistencia de datos de identificación (N° serie, marca, capacidad, rango); vigencias de calibración e inspección; coherencia entre estado real del activo y registros de mantenimiento e inspección previos; brechas de información que comprometan la trazabilidad técnica o el cumplimiento de auditorías.</div></div>
-          <div class="kv-row"><div class="text-sm text-muted font-semibold">Normativa aplicable</div><div class="text-sm text-muted">ISO 9001 §7.5 (control de información documentada) e ISO 9001 §7.1.5 (gestión de equipos de seguimiento y medición); ISO 17020 en cuanto a requisitos de trazabilidad y conservación de evidencia aplicables a organismos de inspección; lineamientos y formatos del cliente cuando se definan.</div></div>
-          <div class="kv-row"><div class="text-sm text-muted font-semibold">Entregables</div><div class="text-sm text-muted">Inventario técnico consolidado en formato digital (planilla estructurada; código QR opcional por activo); set documental ordenado por activo con evidencia disponible; matriz de vigencias con alertas de vencimiento; reporte de brechas de información con priorización por criticidad operativa.</div></div>
+          <div class="kv-row"><div class="text-sm text-muted font-semibold">Alcance</div><div class="text-sm text-muted">Estructuración y actualización de inventarios técnicos de equipos, herramientas y accesorios: codificación, serialización, alta/baja de activos, hojas de vida y consolidación de evidencia documental.<div class="flex flex-wrap gap-2 mt-2"><span class="tag">Trazabilidad</span><span class="tag">Serialización</span><span class="tag">Control documental</span></div></div></div>
+          <div class="kv-row"><div class="text-sm text-muted font-semibold">Qué se inspecciona / verifica</div><div class="text-sm text-muted">Correspondencia entre activo físico y registro documental; completitud de datos de identificación; vigencias de calibración e inspección; coherencia entre estado real del activo y registros previos.</div></div>
+          <div class="kv-row"><div class="text-sm text-muted font-semibold">Normativa aplicable</div><div class="text-sm text-muted">ISO 9001 §7.5 (control de información documentada) e ISO 9001 §7.1.5; ISO 17020 en cuanto a requisitos de trazabilidad; lineamientos del cliente cuando se definan.</div></div>
+          <div class="kv-row"><div class="text-sm text-muted font-semibold">Entregables</div><div class="text-sm text-muted">Inventario técnico consolidado en formato digital (planilla estructurada; código QR opcional); set documental ordenado por activo; matriz de vigencias con alertas de vencimiento; reporte de brechas de información.</div></div>
         </div>
       </article>
 
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     CARRUSEL — EQUIPOS Y ELEMENTOS QUE INSPECCIONAMOS
+     ══════════════════════════════════════════════════════ -->
+<section id="equipos" class="carousel-section" aria-label="Equipos y Elementos que Inspeccionamos">
+  <div class="container">
+    <div class="section-divider"></div>
+    <h2 class="font-bold mb-3" style="font-size:clamp(1.5rem,3vw,1.875rem)">
+      Equipos y Elementos que Inspeccionamos
+    </h2>
+    <p class="text-muted text-sm" style="max-width:48rem">
+      Registro fotográfico de los principales elementos de izaje sometidos a inspección visual,
+      dimensional y de trazabilidad según normativa ASME B30 e ISO 4309.
+    </p>
+  </div>
+
+  <div class="carousel-track-wrapper" id="carouselWrapper" role="region" aria-label="Carrusel de equipos">
+    <div class="carousel-track" id="carouselTrack">
+
+      <!-- ─────────────────────────────────────────────────────────────
+           PARA AGREGAR TUS IMÁGENES:
+           1. Copiá un bloque .carousel-item
+           2. Cambiá src="/images_output/NOMBRE-ARCHIVO.jpg"
+           3. Actualizá alt, carousel-caption-ref y carousel-caption-name
+           ───────────────────────────────────────────────────────────── -->
+
+      <div class="carousel-item">
+        <div class="carousel-img-wrap">
+          <img src="/images_output/grillete.jpg" alt="Grillete de arco" loading="lazy"/>
+        </div>
+        <div class="carousel-caption">
+          <div class="carousel-caption-ref">IZ · GR</div>
+          <div class="carousel-caption-name">Grillete de arco</div>
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <div class="carousel-img-wrap">
+          <img src="/images_output/eslinga-acero.jpg" alt="Eslinga de acero" loading="lazy"/>
+        </div>
+        <div class="carousel-caption">
+          <div class="carousel-caption-ref">IZ · ES</div>
+          <div class="carousel-caption-name">Eslinga de acero</div>
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <div class="carousel-img-wrap">
+          <img src="/images_output/eslinga-sintetica.jpg" alt="Eslinga sintética" loading="lazy"/>
+        </div>
+        <div class="carousel-caption">
+          <div class="carousel-caption-ref">IZ · ES</div>
+          <div class="carousel-caption-name">Eslinga sintética</div>
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <div class="carousel-img-wrap">
+          <img src="/images_output/gancho.jpg" alt="Gancho con seguro" loading="lazy"/>
+        </div>
+        <div class="carousel-caption">
+          <div class="carousel-caption-ref">IZ · GA</div>
+          <div class="carousel-caption-name">Gancho con seguro</div>
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <div class="carousel-img-wrap">
+          <img src="/images_output/cancamo.jpg" alt="Cáncamo giratorio" loading="lazy"/>
+        </div>
+        <div class="carousel-caption">
+          <div class="carousel-caption-ref">IZ · CA</div>
+          <div class="carousel-caption-name">Cáncamo giratorio</div>
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <div class="carousel-img-wrap">
+          <img src="/images_output/polea.jpg" alt="Polea de izaje" loading="lazy"/>
+        </div>
+        <div class="carousel-caption">
+          <div class="carousel-caption-ref">IZ · PO</div>
+          <div class="carousel-caption-name">Polea de izaje</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="carousel-status-bar">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span class="status-line" aria-hidden="true"></span>
+      <span class="status-label">Desplazamiento continuo · pausa al hover</span>
     </div>
   </div>
 </section>
@@ -431,4 +716,81 @@ section:first-of-type{border-top:none}
           </ul>
           <div class="flex flex-wrap gap-3">
             <a href="mailto:insp-industrialnqn@outlook.com" class="btn-primary">Solicitar por email</a>
-            <a href="#servicios" class="btn-outline">Ver
+            <a href="#servicios" class="btn-outline">Ver servicios</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="border-top:1px solid hsl(var(--border)/0.3);padding:2rem 0;margin-top:2rem">
+  <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
+    <span class="text-xs text-muted">© 2025 Inspección Industrial — Agustín Dalla Vecchia</span>
+    <span class="text-xs" style="color:hsl(var(--muted)/0.5);font-family:'JetBrains Mono',monospace;letter-spacing:.1em">ISO 17020 · ASME B30 · API RP</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const track   = document.getElementById('carouselTrack');
+  const wrapper = document.getElementById('carouselWrapper');
+  if (!track || !wrapper) return;
+
+  /* 1. Duplicar para loop infinito */
+  track.innerHTML = track.innerHTML + track.innerHTML;
+
+  /* 2. Drag (mouse) */
+  let isDragging = false, startX = 0, scrollLeft = 0;
+
+  function pauseAnim()  { track.style.animationPlayState = 'paused'; }
+  function resumeAnim() { track.style.animationPlayState = 'running'; }
+
+  wrapper.addEventListener('mousedown', e => {
+    isDragging = true;
+    startX = e.pageX - wrapper.offsetLeft;
+    scrollLeft = wrapper.scrollLeft;
+    pauseAnim();
+    wrapper.style.cursor = 'grabbing';
+  });
+  window.addEventListener('mouseup', () => {
+    if (!isDragging) return;
+    isDragging = false;
+    wrapper.style.cursor = 'grab';
+    if (!wrapper.matches(':hover')) resumeAnim();
+  });
+  wrapper.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    e.preventDefault();
+    wrapper.scrollLeft = scrollLeft - (e.pageX - wrapper.offsetLeft - startX) * 1.4;
+  });
+
+  /* 3. Touch (mobile) */
+  let touchStartX = 0;
+  wrapper.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; pauseAnim(); }, { passive: true });
+  wrapper.addEventListener('touchend',   () => resumeAnim(), { passive: true });
+  wrapper.addEventListener('touchmove',  e => {
+    wrapper.scrollLeft += (touchStartX - e.touches[0].clientX) * 0.4;
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+
+  /* 4. Hover pausa */
+  wrapper.addEventListener('mouseenter', pauseAnim);
+  wrapper.addEventListener('mouseleave', () => { if (!isDragging) resumeAnim(); });
+
+  /* 5. Velocidad responsive */
+  function setSpeed() { track.style.animationDuration = window.innerWidth < 640 ? '18s' : '28s'; }
+  setSpeed();
+  window.addEventListener('resize', setSpeed);
+
+  /* 6. Reduce motion */
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    pauseAnim();
+    wrapper.style.overflowX = 'auto';
+  }
+})();
+</script>
+
+</body>
+</html>
